@@ -50,7 +50,7 @@ const LoginPage: React.FC = () => {
     try {
       await login(formData.email, formData.password);
       router.push("/");
-    } catch (error) {
+    } catch {
       // Error is handled by the auth context
     } finally {
       setLoading(false);

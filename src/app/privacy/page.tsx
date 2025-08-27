@@ -17,7 +17,8 @@ const PrivacyPolicyPage = () => {
               Privacy Policy
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Your privacy is important to us. This policy explains how we collect, use, and protect your personal information.
+              Your privacy is important to us. This policy explains how we
+              collect, use, and protect your personal information.
             </p>
             <p className="text-sm text-gray-500 mt-4">
               Last updated: {new Date().toLocaleDateString()}
@@ -29,7 +30,6 @@ const PrivacyPolicyPage = () => {
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-lg shadow-sm p-8 space-y-8">
-          
           {/* Information We Collect */}
           <section>
             <div className="flex items-center mb-6">
@@ -42,14 +42,30 @@ const PrivacyPolicyPage = () => {
             </div>
             <div className="space-y-4 text-gray-700">
               <p>
-                We collect information you provide directly to us, such as when you create an account, make a rental, or contact us for support.
+                We collect information you provide directly to us, such as when
+                you create an account, make a rental, or contact us for support.
               </p>
               <ul className="list-disc list-inside space-y-2 ml-4">
-                <li><strong>Account Information:</strong> Name, email address, phone number, and address</li>
-                <li><strong>Payment Information:</strong> Credit card details processed securely through Paystack</li>
-                <li><strong>Rental History:</strong> Instruments rented, dates, and rental duration</li>
-                <li><strong>Communication:</strong> Messages, feedback, and support requests</li>
-                <li><strong>Usage Data:</strong> How you interact with our website and services</li>
+                <li>
+                  <strong>Account Information:</strong> Name, email address,
+                  phone number, and address
+                </li>
+                <li>
+                  <strong>Payment Information:</strong> Credit card details
+                  processed securely through Paystack
+                </li>
+                <li>
+                  <strong>Rental History:</strong> Instruments rented, dates,
+                  and rental duration
+                </li>
+                <li>
+                  <strong>Communication:</strong> Messages, feedback, and
+                  support requests
+                </li>
+                <li>
+                  <strong>Usage Data:</strong> How you interact with our website
+                  and services
+                </li>
               </ul>
             </div>
           </section>
@@ -66,7 +82,8 @@ const PrivacyPolicyPage = () => {
             </div>
             <div className="space-y-4 text-gray-700">
               <p>
-                We use the information we collect to provide, maintain, and improve our services:
+                We use the information we collect to provide, maintain, and
+                improve our services:
               </p>
               <ul className="list-disc list-inside space-y-2 ml-4">
                 <li>Process your instrument rentals and payments</li>
@@ -91,13 +108,27 @@ const PrivacyPolicyPage = () => {
             </div>
             <div className="space-y-4 text-gray-700">
               <p>
-                We do not sell, trade, or rent your personal information to third parties. We may share your information only in the following circumstances:
+                We do not sell, trade, or rent your personal information to
+                third parties. We may share your information only in the
+                following circumstances:
               </p>
               <ul className="list-disc list-inside space-y-2 ml-4">
-                <li><strong>Service Providers:</strong> With trusted partners who help us operate our business</li>
-                <li><strong>Payment Processing:</strong> With Paystack to process your payments securely</li>
-                <li><strong>Legal Requirements:</strong> When required by law or to protect our rights</li>
-                <li><strong>Business Transfers:</strong> In connection with a merger or acquisition</li>
+                <li>
+                  <strong>Service Providers:</strong> With trusted partners who
+                  help us operate our business
+                </li>
+                <li>
+                  <strong>Payment Processing:</strong> With Paystack to process
+                  your payments securely
+                </li>
+                <li>
+                  <strong>Legal Requirements:</strong> When required by law or
+                  to protect our rights
+                </li>
+                <li>
+                  <strong>Business Transfers:</strong> In connection with a
+                  merger or acquisition
+                </li>
               </ul>
             </div>
           </section>
@@ -114,13 +145,16 @@ const PrivacyPolicyPage = () => {
             </div>
             <div className="space-y-4 text-gray-700">
               <p>
-                We implement appropriate security measures to protect your personal information:
+                We implement appropriate security measures to protect your
+                personal information:
               </p>
               <ul className="list-disc list-inside space-y-2 ml-4">
                 <li>Encryption of data in transit and at rest</li>
                 <li>Secure payment processing through Paystack</li>
                 <li>Regular security assessments and updates</li>
-                <li>Limited access to personal information on a need-to-know basis</li>
+                <li>
+                  Limited access to personal information on a need-to-know basis
+                </li>
                 <li>Secure hosting and infrastructure</li>
               </ul>
             </div>
@@ -132,14 +166,10 @@ const PrivacyPolicyPage = () => {
               <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mr-4">
                 <FileText className="w-5 h-5 text-yellow-600" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900">
-                Your Rights
-              </h2>
+              <h2 className="text-2xl font-bold text-gray-900">Your Rights</h2>
             </div>
             <div className="space-y-4 text-gray-700">
-              <p>
-                You have the right to:
-              </p>
+              <p>You have the right to:</p>
               <ul className="list-disc list-inside space-y-2 ml-4">
                 <li>Access your personal information</li>
                 <li>Correct inaccurate information</li>
@@ -158,28 +188,46 @@ const PrivacyPolicyPage = () => {
             </h2>
             <div className="space-y-4 text-gray-700">
               <p>
-                We use cookies and similar technologies to enhance your experience on our website:
+                We use cookies and similar technologies to enhance your
+                experience on our website:
               </p>
               <ul className="list-disc list-inside space-y-2 ml-4">
-                <li><strong>Essential Cookies:</strong> Required for basic website functionality</li>
-                <li><strong>Analytics Cookies:</strong> Help us understand how visitors use our site</li>
-                <li><strong>Preference Cookies:</strong> Remember your settings and preferences</li>
-                <li><strong>Marketing Cookies:</strong> Deliver relevant advertisements</li>
+                <li>
+                  <strong>Essential Cookies:</strong> Required for basic website
+                  functionality
+                </li>
+                <li>
+                  <strong>Analytics Cookies:</strong> Help us understand how
+                  visitors use our site
+                </li>
+                <li>
+                  <strong>Preference Cookies:</strong> Remember your settings
+                  and preferences
+                </li>
+                <li>
+                  <strong>Marketing Cookies:</strong> Deliver relevant
+                  advertisements
+                </li>
               </ul>
               <p>
-                You can control cookie settings through your browser preferences.
+                You can control cookie settings through your browser
+                preferences.
               </p>
             </div>
           </section>
 
-          {/* Children's Privacy */}
+          {/* Children&apos;s Privacy */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Children's Privacy
+              Children&apos;s Privacy
             </h2>
             <div className="space-y-4 text-gray-700">
               <p>
-                Our services are not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us.
+                Our services are not intended for children under 13 years of
+                age. We do not knowingly collect personal information from
+                children under 13. If you are a parent or guardian and believe
+                your child has provided us with personal information, please
+                contact us.
               </p>
             </div>
           </section>
@@ -191,7 +239,10 @@ const PrivacyPolicyPage = () => {
             </h2>
             <div className="space-y-4 text-gray-700">
               <p>
-                We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page and updating the "Last updated" date. We encourage you to review this policy periodically.
+                We may update this Privacy Policy from time to time. We will
+                notify you of any changes by posting the new policy on this page
+                and updating the &quot;Last updated&quot; date. We encourage you
+                to review this policy periodically.
               </p>
             </div>
           </section>
@@ -203,12 +254,20 @@ const PrivacyPolicyPage = () => {
             </h2>
             <div className="space-y-4 text-gray-700">
               <p>
-                If you have any questions about this Privacy Policy or our data practices, please contact us:
+                If you have any questions about this Privacy Policy or our data
+                practices, please contact us:
               </p>
               <div className="space-y-2">
-                <p><strong>Email:</strong> privacy@loud-mout-music.com</p>
-                <p><strong>Phone:</strong> +234 8146815186</p>
-                <p><strong>Address:</strong> Paradise 2 estate, chevron Dr, Lekki, Lagos 101123</p>
+                <p>
+                  <strong>Email:</strong> privacy@loud-mout-music.com
+                </p>
+                <p>
+                  <strong>Phone:</strong> +234 8146815186
+                </p>
+                <p>
+                  <strong>Address:</strong> Paradise 2 estate, chevron Dr,
+                  Lekki, Lagos 101123
+                </p>
               </div>
             </div>
           </section>

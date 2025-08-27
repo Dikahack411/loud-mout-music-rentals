@@ -81,7 +81,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     } else {
       setShowSuggestions(false);
     }
-  }, [query]);
+  }, [query, sampleSuggestions]);
 
   const handleSearch = () => {
     onSearch(query, filters);

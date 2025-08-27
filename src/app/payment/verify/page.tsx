@@ -17,7 +17,7 @@ const VerifyPaymentPageContent: React.FC = () => {
         return;
       }
       try {
-        const res = await api.verifyPaystackPayment(reference as string);
+        await api.verifyPaystackPayment(reference as string);
         setStatus("success");
         setMessage("Payment verified successfully");
       } catch (e: unknown) {
