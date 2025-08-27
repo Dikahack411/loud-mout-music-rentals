@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { User, AuthContextType, LoginForm, RegisterForm } from "@/types";
+import { User, AuthContextType, RegisterForm } from "@/types";
 import apiClient from "./api";
 import toast from "react-hot-toast";
 
@@ -58,8 +58,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       setUser(response.user);
       toast.success("Login successful!");
-    } catch (error: any) {
-      const message = error.response?.data?.error || "Login failed";
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { error?: string } } })?.response?.data
+          ?.error || "Login failed";
       toast.error(message);
       throw error;
     } finally {
@@ -78,8 +80,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       setUser(response.user);
       toast.success("Registration successful!");
-    } catch (error: any) {
-      const message = error.response?.data?.error || "Registration failed";
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { error?: string } } })?.response?.data
+          ?.error || "Registration failed";
       toast.error(message);
       throw error;
     } finally {
@@ -104,8 +108,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(updatedUser);
 
       toast.success("Profile updated successfully!");
-    } catch (error: any) {
-      const message = error.response?.data?.error || "Profile update failed";
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { error?: string } } })?.response?.data
+          ?.error || "Profile update failed";
       toast.error(message);
       throw error;
     } finally {

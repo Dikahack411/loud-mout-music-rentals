@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import api from "@/lib/api";
 
-const VerifyPaymentPage: React.FC = () => {
+const VerifyPaymentPageContent: React.FC = () => {
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<string>("verifying");
   const [message, setMessage] = useState<string>("");
@@ -20,9 +20,17 @@ const VerifyPaymentPage: React.FC = () => {
         const res = await api.verifyPaystackPayment(reference as string);
         setStatus("success");
         setMessage("Payment verified successfully");
-      } catch (e: any) {
+      } catch (e: unknown) {
         setStatus("error");
-        setMessage(e?.response?.data?.error || e.message || "Verification failed");
+        const error = e as {
+          response?: { data?: { error?: string } };
+          message?: string;
+        };
+        setMessage(
+          error?.response?.data?.error ||
+            error?.message ||
+            "Verification failed"
+        );
       }
     };
     verify();
@@ -38,6 +46,12 @@ const VerifyPaymentPage: React.FC = () => {
   );
 };
 
+const VerifyPaymentPage: React.FC = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerifyPaymentPageContent />
+    </Suspense>
+  );
+};
+
 export default VerifyPaymentPage;
-
-

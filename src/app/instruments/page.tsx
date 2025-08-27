@@ -117,7 +117,7 @@ const fetchInstruments = async (): Promise<Instrument[]> => {
     const res = await fetch("/api/instruments");
     if (!res.ok) throw new Error("Network response was not ok");
     return await res.json();
-  } catch (error) {
+  } catch (_error) {
     // fallback to sample data
     return sampleInstruments;
   }
@@ -126,7 +126,7 @@ const fetchInstruments = async (): Promise<Instrument[]> => {
 const InstrumentsPage: React.FC = () => {
   const router = useRouter();
   // Paystack public key (test key, replace with your own in production)
-  const paystackPublicKey = "pk_test_xxxxxxxxxxxxxxxxxxxxxxxxx";
+  // const paystackPublicKey = "pk_test_xxxxxxxxxxxxxxxxxxxxxxxxx";
 
   // Function to launch Paystack payment modal
   // Function to navigate to payment page
@@ -135,12 +135,12 @@ const InstrumentsPage: React.FC = () => {
   };
   const [instruments, setInstruments] = useState<Instrument[]>([]);
   const [loading, setLoading] = useState(true);
-  const [newInstrument, setNewInstrument] = useState({
-    name: "",
-    type: "",
-    image: "",
-    description: "",
-  });
+  // const [newInstrument, setNewInstrument] = useState({
+  //   name: "",
+  //   type: "",
+  //   image: "",
+  //   description: "",
+  // });
 
   useEffect(() => {
     fetchInstruments().then((data) => {
@@ -151,22 +151,22 @@ const InstrumentsPage: React.FC = () => {
 
   if (loading) return <div>Loading instruments...</div>;
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setNewInstrument((prev) => ({ ...prev, [name]: value }));
-  };
+  // const handleInputChange = (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  // ) => {
+  //   const { name, value } = e.target;
+  //   setNewInstrument((prev) => ({ ...prev, [name]: value }));
+  // };
 
-  const handleAddInstrument = (e: React.FormEvent) => {
-    e.preventDefault();
-    const instrumentToAdd = {
-      ...newInstrument,
-      id: (instruments.length + 1).toString(),
-    };
-    setInstruments([...instruments, instrumentToAdd]);
-    setNewInstrument({ name: "", type: "", image: "", description: "" });
-  };
+  // const handleAddInstrument = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   const instrumentToAdd = {
+  //       ...newInstrument,
+  //       id: (instruments.length + 1).toString(),
+  //   };
+  //   setInstruments([...instruments, instrumentToAdd]);
+  //   setNewInstrument({ name: "", type: "", image: "", description: "" });
+  // };
 
   return (
     <>

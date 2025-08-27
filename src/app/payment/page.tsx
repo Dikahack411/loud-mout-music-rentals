@@ -1,10 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import api from "@/lib/api";
 
-const PaymentPage: React.FC = () => {
-  const router = useRouter();
+const PaymentPageContent: React.FC = () => {
+  // const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
   const rentalId = searchParams.get("rentalId");
@@ -20,20 +20,26 @@ const PaymentPage: React.FC = () => {
 
         const init = await api.initializePaystackPayment({
           rentalId,
+          email: "user@example.com", // TODO: Get actual user email
           amount: Number(amount),
-          paymentMethod: "paystack",
           callbackUrl: `${window.location.origin}/payment/verify`,
-        } as any);
+        });
 
-        if ((init as any).authorization_url && (init as any).reference) {
-          window.location.href = (init as any).authorization_url;
-        } else if ((init as any).payment_url) {
-          window.location.href = (init as any).payment_url;
+        if (init.authorization_url && init.reference) {
+          window.location.href = init.authorization_url;
+        } else if (init.payment_url) {
+          window.location.href = init.payment_url;
         } else {
           setError("Failed to initialize payment");
         }
-      } catch (e: any) {
-        setError(e?.response?.data?.error || e.message || "Payment error");
+      } catch (e: unknown) {
+        const error = e as {
+          response?: { data?: { error?: string } };
+          message?: string;
+        };
+        setError(
+          error?.response?.data?.error || error?.message || "Payment error"
+        );
       }
     };
     start();
@@ -53,6 +59,14 @@ const PaymentPage: React.FC = () => {
       <h1>Redirecting to payment...</h1>
       <p>Please wait.</p>
     </div>
+  );
+};
+
+const PaymentPage: React.FC = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PaymentPageContent />
+    </Suspense>
   );
 };
 
