@@ -1,12 +1,21 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Keep minimal valid config; App Router and src/ are detected automatically
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
+  },
+  experimental: {
+    optimizePackageImports: ['lucide-react'],
+  },
+  images: {
+    domains: ['images.unsplash.com', 'plus.unsplash.com'],
+    formats: ['image/webp', 'image/avif'],
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
   },
 };
 

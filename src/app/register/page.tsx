@@ -64,13 +64,15 @@ const RegisterPage: React.FC = () => {
 
     if (name.includes(".")) {
       const [parent, child] = name.split(".");
-      setFormData((prev) => ({
-        ...prev,
-        [parent]: {
-          ...(prev[parent as keyof typeof prev] as any),
-          [child]: value,
-        },
-      }));
+      if (parent === "address") {
+        setFormData((prev) => ({
+          ...prev,
+          address: {
+            ...prev.address,
+            [child]: value,
+          },
+        }));
+      }
     } else {
       setFormData((prev) => ({
         ...prev,
