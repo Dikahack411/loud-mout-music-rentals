@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth-context";
 import Header from "@/components/layout/Header";
 import { User, Mail, Lock, Phone, MapPin, Music } from "lucide-react";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 interface Address {
   street: string;
@@ -50,9 +51,14 @@ const RegisterPage: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await register(formData);
+      const result = await register(formData);
+      console.log("Registration successful:", result);
+      toast.success(
+        "Account created successfully! Welcome to Loud-Mout-Music Rentals!"
+      );
       router.push("/");
-    } catch (error) {
+    } catch (error: unknown) {
+      console.error("Registration error:", error);
       // Error is handled by the auth context
     } finally {
       setLoading(false);

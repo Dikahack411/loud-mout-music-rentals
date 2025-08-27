@@ -2,9 +2,11 @@
 
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import SearchBar, { SearchFilters } from "@/components/ui/SearchBar";
 import {
   Music,
   Guitar,
@@ -20,6 +22,21 @@ import {
 
 const HomePage: React.FC = () => {
   const { user } = useAuth();
+  const router = useRouter();
+
+  const handleSearch = (query: string, filters: SearchFilters) => {
+    // Navigate to instruments page with search parameters
+    const searchParams = new URLSearchParams();
+    if (query) searchParams.set("search", query);
+    if (filters.category) searchParams.set("category", filters.category);
+    if (filters.priceRange) searchParams.set("priceRange", filters.priceRange);
+    if (filters.availability)
+      searchParams.set("availability", filters.availability);
+    if (filters.condition) searchParams.set("condition", filters.condition);
+
+    const searchString = searchParams.toString();
+    router.push(`/instruments${searchString ? `?${searchString}` : ""}`);
+  };
 
   const featuredInstruments = [
     {
@@ -135,6 +152,17 @@ const HomePage: React.FC = () => {
               commitment of ownership. Perfect for events, practice, or trying
               new instruments.
             </p>
+
+            {/* Search Bar */}
+            <div className="max-w-2xl mx-auto mb-8">
+              <SearchBar
+                onSearch={handleSearch}
+                placeholder="Search for instruments, brands, or categories..."
+                className="w-full"
+                showFilters={false}
+              />
+            </div>
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/instruments"
@@ -302,7 +330,7 @@ const HomePage: React.FC = () => {
           </h2>
           <p className="text-xl mb-8 text-blue-100">
             Join thousands of musicians who trust Loud-Mout-Music Rentals for
-            their instrument needs with a budget friendly.
+            their instrument needs & budget friendly.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

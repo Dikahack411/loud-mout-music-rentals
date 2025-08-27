@@ -2,7 +2,9 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import SearchBar, { SearchFilters } from "@/components/ui/SearchBar";
 import {
   Menu,
   X,
@@ -20,6 +22,8 @@ const Header: React.FC = () => {
   const { user, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
+  const router = useRouter();
 
   const navigation = [
     { name: "Home", href: "/", icon: Home },
@@ -40,6 +44,20 @@ const Header: React.FC = () => {
     setIsUserMenuOpen(false);
   };
 
+  const handleSearch = (query: string, filters: SearchFilters) => {
+    // Navigate to instruments page with search parameters
+    const searchParams = new URLSearchParams();
+    if (query) searchParams.set("search", query);
+    if (filters.category) searchParams.set("category", filters.category);
+    if (filters.priceRange) searchParams.set("priceRange", filters.priceRange);
+    if (filters.availability)
+      searchParams.set("availability", filters.availability);
+    if (filters.condition) searchParams.set("condition", filters.condition);
+
+    const searchString = searchParams.toString();
+    router.push(`/instruments${searchString ? `?${searchString}` : ""}`);
+  };
+
   return (
     <header className="bg-white shadow-sm border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -50,7 +68,9 @@ const Header: React.FC = () => {
               <div className="w-8 h-8 bg-gradient-to-t from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                 <Music className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-gray-900">Loud-Mout-Music Rentals</span>
+              <span className="text-xl font-bold text-gray-900">
+                Loud-Mout-Music Rentals
+              </span>
             </Link>
           </div>
 
@@ -84,6 +104,15 @@ const Header: React.FC = () => {
               </div>
             )}
           </nav>
+
+          {/* Search Bar - Desktop */}
+          <div className="hidden lg:flex flex-1 max-w-md mx-8">
+            <SearchBar
+              onSearch={handleSearch}
+              placeholder="Search instruments..."
+              showFilters={false}
+            />
+          </div>
 
           {/* User Menu / Auth Buttons */}
           <div className="flex items-center space-x-4">
@@ -161,6 +190,15 @@ const Header: React.FC = () => {
               )}
             </button>
           </div>
+        </div>
+
+        {/* Mobile Search Bar */}
+        <div className="lg:hidden py-4 border-t border-gray-200">
+          <SearchBar
+            onSearch={handleSearch}
+            placeholder="Search instruments..."
+            showFilters={false}
+          />
         </div>
 
         {/* Mobile Navigation */}

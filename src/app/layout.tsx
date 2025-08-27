@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "LOUD-MOUT-MUSIC-RENTALS",
   description:
-    "Your premier destination for musical instrument rentals. Quality instruments, competitive rates, and exceptional service.",
+    "Your premier destination for musical instrument rentals. Quality instruments, competitive rates, and exceptional services.",
   icons: {
     icon: "/2gg.png",
   },
