@@ -36,26 +36,29 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const searchRef = useRef<HTMLDivElement>(null);
 
   // Sample suggestions - in real app, these would come from API
-  const sampleSuggestions = [
-    "Guitar",
-    "Piano",
-    "Drums",
-    "Violin",
-    "Saxophone",
-    "Trumpet",
-    "Flute",
-    "Microphone",
-    "DJ Controller",
-    "Studio Equipment",
-    "Acoustic",
-    "Electric",
-    "Fender",
-    "Yamaha",
-    "Roland",
-    "Pearl",
-    "Shure",
-    "Audio-Technica",
-  ];
+  const sampleSuggestions = React.useMemo(
+    () => [
+      "Guitar",
+      "Piano",
+      "Drums",
+      "Violin",
+      "Saxophone",
+      "Trumpet",
+      "Flute",
+      "Microphone",
+      "DJ Controller",
+      "Studio Equipment",
+      "Acoustic",
+      "Electric",
+      "Fender",
+      "Yamaha",
+      "Roland",
+      "Pearl",
+      "Shure",
+      "Audio-Technica",
+    ],
+    []
+  );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

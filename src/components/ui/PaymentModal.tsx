@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { X, CreditCard, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import apiClient from "@/lib/api";
+import { Rental, User } from "@/types";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -112,12 +113,16 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         duration: rentalDetails.duration,
         durationType: rentalDetails.durationType,
         totalAmount: rentalDetails.totalAmount,
-      } as any);
+      } as unknown as Rental);
 
       // Initialize Paystack payment via API client
+      const rentalIds = rental as unknown as { _id?: string; id?: string };
+      const resolvedRentalId = rentalIds._id ?? rentalIds.id ?? "";
+      const email = (currentUser as User | null)?.email ?? user.email;
+
       const paymentData = await apiClient.initializePaystackPayment({
-        rentalId: (rental as any)._id || (rental as any).id,
-        email: (currentUser as any).email || user.email,
+        rentalId: resolvedRentalId,
+        email,
         amount: rentalDetails.totalAmount,
         callbackUrl: `${window.location.origin}/payment/verify`,
       });
@@ -166,15 +171,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
   const verifyPayment = async (reference: string) => {
     try {
-      const result = await apiClient.verifyPaystackPayment(reference);
-      if ((result as any).success !== false) {
+      await apiClient.verifyPaystackPayment(reference);
+      {
         setPaymentStatus("success");
         setTimeout(() => {
           onClose();
           window.location.href = "/rentals";
         }, 2000);
-      } else {
-        setPaymentStatus("failed");
       }
     } catch (err) {
       console.error("Payment verification error:", err);

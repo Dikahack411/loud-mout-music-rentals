@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import { User, Mail, Phone, MapPin, Edit3, Save, X } from "lucide-react";
+import { User, Edit3, Save, X } from "lucide-react";
 import toast from "react-hot-toast";
 
 const ProfilePage = () => {

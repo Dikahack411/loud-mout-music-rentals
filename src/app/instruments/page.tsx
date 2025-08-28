@@ -156,7 +156,7 @@ const fetchInstruments = async (): Promise<Instrument[]> => {
     const res = await fetch("/api/instruments");
     if (!res.ok) throw new Error("Network response was not ok");
     return await res.json();
-  } catch (error) {
+  } catch {
     // fallback to sample data
     return sampleInstruments;
   }
