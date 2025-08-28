@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { X, CreditCard, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import apiClient from "@/lib/api";
-import { Rental, User } from "@/types";
+import { Rental, User, RentalForm as RentalFormType } from "@/types";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -105,20 +105,33 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     setError(null);
 
     try {
+      // Map UI duration to API duration type
+      const mapDurationType = (
+        t: string
+      ): RentalFormType["durationType"] => {
+        if (t === "week") return "weekly";
+        if (t === "month") return "monthly";
+        return "daily";
+      };
+
       // Create rental via API client (uses base URL and auth automatically)
-      const rental = await apiClient.createRental({
+      const rentalForm: RentalFormType = {
         instrumentId: instrument.id,
         startDate: rentalDetails.startDate,
         endDate: rentalDetails.endDate,
         duration: rentalDetails.duration,
-        durationType: rentalDetails.durationType,
-        totalAmount: rentalDetails.totalAmount,
-      } as unknown as Rental);
+        durationType: mapDurationType(rentalDetails.durationType),
+        pickupLocation: "default",
+        returnLocation: "default",
+        paymentMethod: "paystack",
+      };
+
+      const rental = await apiClient.createRental(rentalForm);
 
       // Initialize Paystack payment via API client
       const rentalIds = rental as unknown as { _id?: string; id?: string };
       const resolvedRentalId = rentalIds._id ?? rentalIds.id ?? "";
-      const email = (currentUser as User | null)?.email ?? user.email;
+      const email = (currentUser as User).email;
 
       const paymentData = await apiClient.initializePaystackPayment({
         rentalId: resolvedRentalId,
@@ -132,8 +145,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       if (window.PaystackPop) {
         const handler = window.PaystackPop.setup({
           key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "pk_test_...",
-          email: user.email,
-          amount: paymentData.amount || rentalDetails.totalAmount * 100, // Convert to kobo
+          email,
+          amount: Math.round(rentalDetails.totalAmount * 100),
           reference: paymentData.reference,
           callback: async (response: PaystackResponse) => {
             if (response.status === "success") {
