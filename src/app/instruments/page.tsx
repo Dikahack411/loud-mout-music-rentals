@@ -12,7 +12,9 @@ interface Instrument {
   type: string;
   image: string;
   description: string;
-  price?: number;
+  dailyRate: number;
+  weeklyRate: number;
+  monthlyRate: number;
   condition?: string;
   available?: boolean;
 }
@@ -24,7 +26,9 @@ const sampleInstruments: Instrument[] = [
     type: "DJ",
     image: "/2g.png",
     description: "A high-quality Disk-Jockey perfect for bookings.",
-    price: 45,
+    dailyRate: 45,
+    weeklyRate: 270,
+    monthlyRate: 1080,
     condition: "excellent",
     available: true,
   },
@@ -35,7 +39,9 @@ const sampleInstruments: Instrument[] = [
     image:
       "https://images.unsplash.com/photo-1548701213-a7c7872f4df7?w=800&auto=format&fit=crop&q=60",
     description: "A versatile digital piano with realistic sound and feel.",
-    price: 120,
+    dailyRate: 120,
+    weeklyRate: 720,
+    monthlyRate: 2880,
     condition: "excellent",
     available: true,
   },
@@ -46,7 +52,9 @@ const sampleInstruments: Instrument[] = [
     image:
       "https://images.unsplash.com/photo-1707409189962-0e6cdf81fb16?w=800&auto=format&fit=crop&q=60",
     description: "A complete drum set for all your rhythm needs.",
-    price: 85,
+    dailyRate: 85,
+    weeklyRate: 510,
+    monthlyRate: 2040,
     condition: "good",
     available: true,
   },
@@ -57,7 +65,9 @@ const sampleInstruments: Instrument[] = [
     image:
       "https://images.unsplash.com/photo-1580719653258-26873fde0b4d?w=800&auto=format&fit=crop&q=60",
     description: "A simple flute for all your rhythm needs.",
-    price: 25,
+    dailyRate: 25,
+    weeklyRate: 150,
+    monthlyRate: 600,
     condition: "excellent",
     available: true,
   },
@@ -68,7 +78,9 @@ const sampleInstruments: Instrument[] = [
     image:
       "https://images.unsplash.com/photo-1573871669414-010dbf73ca84?w=800&auto=format&fit=crop&q=60",
     description: "A brass trumpet for all your rhythm needs.",
-    price: 35,
+    dailyRate: 35,
+    weeklyRate: 210,
+    monthlyRate: 840,
     condition: "good",
     available: false,
   },
@@ -79,7 +91,9 @@ const sampleInstruments: Instrument[] = [
     image:
       "https://images.unsplash.com/photo-1566454108377-77a89ec31134?w=800&auto=format&fit=crop&q=60",
     description: "A saxophone for all your rhythm needs.",
-    price: 55,
+    dailyRate: 55,
+    weeklyRate: 330,
+    monthlyRate: 1320,
     condition: "excellent",
     available: true,
   },
@@ -90,7 +104,9 @@ const sampleInstruments: Instrument[] = [
     image:
       "https://images.unsplash.com/photo-1472312656035-eeef4726de6c?w=800&auto=format&fit=crop&q=60",
     description: "A complete violin set for all your rhythm needs.",
-    price: 40,
+    dailyRate: 40,
+    weeklyRate: 240,
+    monthlyRate: 960,
     condition: "good",
     available: true,
   },
@@ -101,7 +117,9 @@ const sampleInstruments: Instrument[] = [
     image:
       "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format&fit=crop&q=60",
     description: "A condenser microphone for all your vocal needs.",
-    price: 20,
+    dailyRate: 20,
+    weeklyRate: 120,
+    monthlyRate: 480,
     condition: "excellent",
     available: true,
   },
@@ -112,7 +130,9 @@ const sampleInstruments: Instrument[] = [
     image:
       "https://images.unsplash.com/photo-1619597361832-a568b1e0555f?w=800&auto=format&fit=crop&q=60",
     description: "A complete DJ set for all your party needs.",
-    price: 65,
+    dailyRate: 65,
+    weeklyRate: 390,
+    monthlyRate: 1560,
     condition: "excellent",
     available: true,
   },
@@ -123,7 +143,9 @@ const sampleInstruments: Instrument[] = [
     image:
       "https://images.unsplash.com/photo-1542464497-e217d476a9b2?w=800&auto=format&fit=crop&q=60",
     description: "A complete studio set for all your production needs.",
-    price: 95,
+    dailyRate: 95,
+    weeklyRate: 570,
+    monthlyRate: 2280,
     condition: "good",
     available: false,
   },
@@ -134,7 +156,9 @@ const sampleInstruments: Instrument[] = [
     image:
       "https://media.istockphoto.com/id/2165367748/photo/drummers-and-their-instruments.webp?a=1&b=1&s=612x612&w=0&k=20&c=HiAnLo0yvZcrh1D3XRhUdJxIxeIhCK7CwFseXzJKn9g=",
     description: "A complete studio set for all your production needs.",
-    price: 30,
+    dailyRate: 30,
+    weeklyRate: 180,
+    monthlyRate: 720,
     condition: "fair",
     available: true,
   },
@@ -145,7 +169,9 @@ const sampleInstruments: Instrument[] = [
     image:
       "https://plus.unsplash.com/premium_photo-1681396937086-8a28edd8d257?w=800&auto=format&fit=crop&q=60",
     description: "A complete studio set for all your production needs.",
-    price: 35,
+    dailyRate: 35,
+    weeklyRate: 210,
+    monthlyRate: 840,
     condition: "excellent",
     available: true,
   },
@@ -241,11 +267,10 @@ const InstrumentsPage: React.FC = () => {
     if (filters.priceRange) {
       const [min, max] = filters.priceRange.split("-").map(Number);
       filtered = filtered.filter((instrument) => {
-        if (!instrument.price) return false;
         if (filters.priceRange === "100+") {
-          return instrument.price >= 100;
+          return instrument.dailyRate >= 100;
         }
-        return instrument.price >= min && instrument.price <= max;
+        return instrument.dailyRate >= min && instrument.dailyRate <= max;
       });
     }
 
@@ -433,7 +458,7 @@ const InstrumentsPage: React.FC = () => {
 
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-lg font-bold text-blue-600">
-                        ${instrument.price || "N/A"}/day
+                        ${instrument.dailyRate}/day
                       </span>
                       {instrument.condition && (
                         <span
@@ -472,14 +497,21 @@ const InstrumentsPage: React.FC = () => {
       </div>
 
       {/* Rental Form Modal */}
-      {selectedInstrument && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <RentalForm
-            instrument={selectedInstrument}
-            onClose={() => setSelectedInstrument(null)}
-          />
-        </div>
-      )}
+              {selectedInstrument && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <RentalForm
+              instrument={{
+                id: selectedInstrument.id,
+                name: selectedInstrument.name,
+                dailyRate: selectedInstrument.dailyRate,
+                weeklyRate: selectedInstrument.weeklyRate,
+                monthlyRate: selectedInstrument.monthlyRate,
+                image: selectedInstrument.image,
+              }}
+              onClose={() => setSelectedInstrument(null)}
+            />
+          </div>
+        )}
     </>
   );
 };

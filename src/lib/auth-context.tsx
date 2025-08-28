@@ -26,19 +26,47 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const savedUser = localStorage.getItem("user");
+        let token = null;
+        let savedUser = null;
+
+        if (typeof window !== "undefined") {
+          token = localStorage.getItem("token");
+          savedUser = localStorage.getItem("user");
+        }
 
         if (token && savedUser) {
-          // Verify token by getting user profile
-          const userProfile = await apiClient.getProfile();
-          setUser(userProfile);
+          try {
+            // Verify token by getting user profile
+            const userProfile = await apiClient.getProfile();
+            setUser(userProfile);
+          } catch (error) {
+            console.error("Token verification failed:", error);
+            // For now, use saved user data to prevent unnecessary logout
+            // In production, you might want to clear invalid tokens
+            try {
+              const parsedUser = JSON.parse(savedUser);
+              setUser(parsedUser);
+            } catch (parseError) {
+              console.error("Failed to parse saved user data:", parseError);
+              if (typeof window !== "undefined") {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+              }
+              setUser(null);
+            }
+          }
+        } else {
+          // No token or user data, ensure user is null
+          setUser(null);
         }
       } catch (error) {
         console.error("Auth initialization error:", error);
         // Clear invalid tokens
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+        }
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -53,8 +81,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await apiClient.login({ email, password });
 
       // Store token and user data
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("user", JSON.stringify(response.user));
+      if (typeof window !== "undefined") {
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("user", JSON.stringify(response.user));
+      }
 
       setUser(response.user);
       toast.success("Login successful!");
@@ -75,8 +105,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await apiClient.register(userData);
 
       // Store token and user data
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("user", JSON.stringify(response.user));
+      if (typeof window !== "undefined") {
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("user", JSON.stringify(response.user));
+      }
 
       setUser(response.user);
       toast.success("Registration successful!");
@@ -92,8 +124,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    }
     setUser(null);
     toast.success("Logged out successfully");
   };
@@ -104,7 +138,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const updatedUser = await apiClient.updateProfile(userData);
 
       // Update stored user data
-      localStorage.setItem("user", JSON.stringify(updatedUser));
+      if (typeof window !== "undefined") {
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+      }
       setUser(updatedUser);
 
       toast.success("Profile updated successfully!");

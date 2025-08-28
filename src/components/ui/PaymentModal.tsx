@@ -10,7 +10,9 @@ interface PaymentModalProps {
   instrument: {
     id: string;
     name: string;
-    price?: number;
+    dailyRate: number;
+    weeklyRate: number;
+    monthlyRate: number;
     image: string;
   };
   rentalDetails: {
@@ -54,6 +56,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   rentalDetails,
 }) => {
   const { user } = useAuth();
+
   const [loading, setLoading] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<
     "pending" | "success" | "failed"
@@ -75,7 +78,25 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   }, [isOpen]);
 
   const initializePayment = async () => {
-    if (!user) {
+    // Double-check user authentication
+    let currentUser = user;
+    let currentToken = null;
+
+    if (typeof window !== "undefined") {
+      if (!currentUser) {
+        try {
+          const savedUser = localStorage.getItem("user");
+          if (savedUser) {
+            currentUser = JSON.parse(savedUser);
+          }
+        } catch (error) {
+          console.error("Failed to parse saved user data:", error);
+        }
+      }
+      currentToken = localStorage.getItem("token");
+    }
+
+    if (!currentUser || !currentToken) {
       setError("Please login to continue with payment");
       return;
     }
@@ -116,7 +137,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         },
         body: JSON.stringify({
           rentalId: rental._id,
-          email: user.email,
+          email: currentUser.email,
           amount: rentalDetails.totalAmount,
           callbackUrl: `${window.location.origin}/payment/verify`,
         }),
@@ -133,7 +154,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       if (window.PaystackPop) {
         const handler = window.PaystackPop.setup({
           key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "pk_test_...",
-          email: user.email,
+          email: currentUser.email,
           amount: paymentData.amount || rentalDetails.totalAmount * 100, // Convert to kobo
           reference: paymentData.reference,
           callback: async (response: PaystackResponse) => {

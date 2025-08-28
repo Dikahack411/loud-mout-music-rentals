@@ -113,7 +113,7 @@ const Footer: React.FC = () => {
               <div className="flex items-center space-x-3">
                 <MapPin className="w-5 h-5 text-gray-400" />
                 <span className="text-gray-300">
-                  Paradise 2 estate, chevron Dr, Lekki, Lagos 101123
+                  Paradise 2 estate, chevron Dr, Lekki, Lagos 106104
                 </span>
               </div>
               <div className="flex items-center space-x-3">
