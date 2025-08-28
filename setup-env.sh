@@ -1,0 +1,43 @@
+#!/bin/bash
+
+echo "🚀 Setting up Environment Variables for Vercel Deployment"
+echo "========================================================"
+echo ""
+
+echo "📋 Backend Environment Variables to set in Vercel:"
+echo "------------------------------------------------"
+echo "MONGODB_URI=mongodb+srv://2gdikachi:iySohvkTJhEZZsxT@mylabphase.1tu4msx.mongodb.net/?retryWrites=true&w=majority&appName=mylabphase&ssl=true&tls=true&tlsAllowInvalidCertificates=true"
+echo "JWT_SECRET=0a4724d88d9e2d2b0740fffe6026435db57c61ed6e96274be9267f69671124aa"
+echo "PAYSTACK_PUBLIC_KEY=pk_test_631784212399b0abba3f88d79465e49a3093237e"
+echo "PAYSTACK_SECRET_KEY=sk_test_369b5408e0202d5588761540dbd86d3db85fa9df"
+echo "NODE_ENV=production"
+echo "PORT=5001"
+echo "FRONTEND_URL=https://your-frontend-domain.vercel.app"
+echo ""
+
+echo "🌐 Frontend Environment Variables to set in Vercel:"
+echo "-------------------------------------------------"
+echo "NEXT_PUBLIC_API_URL=https://your-backend-domain.vercel.app/api"
+echo "NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=pk_test_631784212399b0abba3f88d79465e49a3093237e"
+echo "NODE_ENV=production"
+echo ""
+
+echo "📝 Instructions:"
+echo "1. Deploy backend to Vercel first"
+echo "2. Set backend environment variables in Vercel dashboard"
+echo "3. Note your backend URL"
+echo "4. Update FRONTEND_URL in backend with your actual frontend URL"
+echo "5. Deploy frontend to Vercel"
+echo "6. Set frontend environment variables with actual backend URL"
+echo "7. Test the complete application"
+echo ""
+
+echo "🔒 Security Notes:"
+echo "- Never commit .env files to Git"
+echo "- Use test keys for development"
+echo "- Change JWT_SECRET for production"
+echo "- Use live Paystack keys for production"
+echo ""
+
+echo "✅ Environment setup guide created in DEPLOYMENT-ENV-SETUP.md"
+echo "🎯 You're ready to deploy to Vercel!"
