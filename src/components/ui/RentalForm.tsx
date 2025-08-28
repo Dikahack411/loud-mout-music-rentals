@@ -8,9 +8,7 @@ interface RentalFormProps {
   instrument: {
     id: string;
     name: string;
-    dailyRate: number;
-    weeklyRate: number;
-    monthlyRate: number;
+    price?: number;
     image: string;
   };
   onClose: () => void;
@@ -20,9 +18,9 @@ const RentalForm: React.FC<RentalFormProps> = ({ instrument, onClose }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [duration, setDuration] = useState(1);
-  const [durationType, setDurationType] = useState<
-    "daily" | "weekly" | "monthly"
-  >("daily");
+  const [durationType, setDurationType] = useState<"day" | "week" | "month">(
+    "day"
+  );
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   // Calculate minimum start date (today)
@@ -32,7 +30,7 @@ const RentalForm: React.FC<RentalFormProps> = ({ instrument, onClose }) => {
   const calculateEndDate = (
     start: string,
     dur: number,
-    type: "daily" | "weekly" | "monthly"
+    type: "day" | "week" | "month"
   ) => {
     if (!start) return "";
 
@@ -40,13 +38,13 @@ const RentalForm: React.FC<RentalFormProps> = ({ instrument, onClose }) => {
     const endDateObj = new Date(startDateObj);
 
     switch (type) {
-      case "daily":
+      case "day":
         endDateObj.setDate(startDateObj.getDate() + dur);
         break;
-      case "weekly":
+      case "week":
         endDateObj.setDate(startDateObj.getDate() + dur * 7);
         break;
-      case "monthly":
+      case "month":
         endDateObj.setMonth(startDateObj.getMonth() + dur);
         break;
     }
@@ -68,19 +66,21 @@ const RentalForm: React.FC<RentalFormProps> = ({ instrument, onClose }) => {
 
   // Calculate total amount
   const calculateTotalAmount = () => {
-    let rate = 0;
+    if (!instrument.price) return 0;
+
+    let multiplier = 1;
     switch (durationType) {
-      case "daily":
-        rate = instrument.dailyRate;
+      case "day":
+        multiplier = duration;
         break;
-      case "weekly":
-        rate = instrument.weeklyRate;
+      case "week":
+        multiplier = duration * 7;
         break;
-      case "monthly":
-        rate = instrument.monthlyRate;
+      case "month":
+        multiplier = duration * 30;
         break;
     }
-    return rate * duration;
+    return instrument.price * multiplier;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -126,7 +126,7 @@ const RentalForm: React.FC<RentalFormProps> = ({ instrument, onClose }) => {
             <div>
               <h3 className="font-semibold text-gray-900">{instrument.name}</h3>
               <p className="text-lg font-bold text-blue-600">
-                ${instrument.dailyRate}/day
+                ${instrument.price || "N/A"}/day
               </p>
             </div>
           </div>
@@ -174,15 +174,13 @@ const RentalForm: React.FC<RentalFormProps> = ({ instrument, onClose }) => {
               <select
                 value={durationType}
                 onChange={(e) =>
-                  setDurationType(
-                    e.target.value as "daily" | "weekly" | "monthly"
-                  )
+                  setDurationType(e.target.value as "day" | "week" | "month")
                 }
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
-                <option value="daily">Day(s)</option>
-                <option value="weekly">Week(s)</option>
-                <option value="monthly">Month(s)</option>
+                <option value="day">Day(s)</option>
+                <option value="week">Week(s)</option>
+                <option value="month">Month(s)</option>
               </select>
             </div>
           </div>

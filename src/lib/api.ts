@@ -16,7 +16,7 @@ import {
 } from "@/types";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
 
 class ApiClient {
   private client: AxiosInstance;
@@ -307,16 +307,18 @@ class ApiClient {
     return response.data;
   }
 
-  async getAnalytics(period?: string): Promise<{ data: unknown; total: number }> {
+  async getAnalytics(
+    period?: string
+  ): Promise<{ data: unknown; total: number }> {
     const params = period ? `?period=${period}` : "";
-    const response: AxiosResponse<{ data: unknown; total: number }> = await this.client.get(
-      `/admin/analytics${params}`
-    );
+    const response: AxiosResponse<{ data: unknown; total: number }> =
+      await this.client.get(`/admin/analytics${params}`);
     return response.data;
   }
 
   async getSystemHealth(): Promise<{ status: string; uptime: number }> {
-    const response: AxiosResponse<{ status: string; uptime: number }> = await this.client.get("/admin/health");
+    const response: AxiosResponse<{ status: string; uptime: number }> =
+      await this.client.get("/admin/health");
     return response.data;
   }
 
@@ -326,18 +328,23 @@ class ApiClient {
     recipients?: string[],
     data?: Record<string, unknown>
   ): Promise<{ success: boolean; message: string }> {
-    const response: AxiosResponse<{ success: boolean; message: string }> = await this.client.post(
-      "/admin/notifications",
-      { type, message, recipients, data }
-    );
+    const response: AxiosResponse<{ success: boolean; message: string }> =
+      await this.client.post("/admin/notifications", {
+        type,
+        message,
+        recipients,
+        data,
+      });
     return response.data;
   }
 
-  async exportData(type: string, format?: string): Promise<{ url: string; filename: string }> {
+  async exportData(
+    type: string,
+    format?: string
+  ): Promise<{ url: string; filename: string }> {
     const params = format ? `?format=${format}` : "";
-    const response: AxiosResponse<{ url: string; filename: string }> = await this.client.get(
-      `/admin/export/${type}${params}`
-    );
+    const response: AxiosResponse<{ url: string; filename: string }> =
+      await this.client.get(`/admin/export/${type}${params}`);
     return response.data;
   }
 
@@ -376,8 +383,16 @@ class ApiClient {
     return response.data;
   }
 
-  async getUserStats(): Promise<{ totalUsers: number; activeUsers: number; newUsers: number }> {
-    const response: AxiosResponse<{ totalUsers: number; activeUsers: number; newUsers: number }> = await this.client.get("/users/stats");
+  async getUserStats(): Promise<{
+    totalUsers: number;
+    activeUsers: number;
+    newUsers: number;
+  }> {
+    const response: AxiosResponse<{
+      totalUsers: number;
+      activeUsers: number;
+      newUsers: number;
+    }> = await this.client.get("/users/stats");
     return response.data;
   }
 }

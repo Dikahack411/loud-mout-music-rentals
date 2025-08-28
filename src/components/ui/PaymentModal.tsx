@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { X, CreditCard, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
+import apiClient from "@/lib/api";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -10,9 +11,7 @@ interface PaymentModalProps {
   instrument: {
     id: string;
     name: string;
-    dailyRate: number;
-    weeklyRate: number;
-    monthlyRate: number;
+    price?: number;
     image: string;
   };
   rentalDetails: {
@@ -105,56 +104,30 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     setError(null);
 
     try {
-      // Create rental first
-      const rentalResponse = await fetch("/api/rentals", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          instrumentId: instrument.id,
-          startDate: rentalDetails.startDate,
-          endDate: rentalDetails.endDate,
-          duration: rentalDetails.duration,
-          durationType: rentalDetails.durationType,
-          totalAmount: rentalDetails.totalAmount,
-        }),
+      // Create rental via API client (uses base URL and auth automatically)
+      const rental = await apiClient.createRental({
+        instrumentId: instrument.id,
+        startDate: rentalDetails.startDate,
+        endDate: rentalDetails.endDate,
+        duration: rentalDetails.duration,
+        durationType: rentalDetails.durationType,
+        totalAmount: rentalDetails.totalAmount,
+      } as any);
+
+      // Initialize Paystack payment via API client
+      const paymentData = await apiClient.initializePaystackPayment({
+        rentalId: (rental as any)._id || (rental as any).id,
+        email: (currentUser as any).email || user.email,
+        amount: rentalDetails.totalAmount,
+        callbackUrl: `${window.location.origin}/payment/verify`,
       });
-
-      if (!rentalResponse.ok) {
-        throw new Error("Failed to create rental");
-      }
-
-      const rental = await rentalResponse.json();
-
-      // Initialize Paystack payment
-      const paymentResponse = await fetch("/api/payments/paystack/initialize", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          rentalId: rental._id,
-          email: currentUser.email,
-          amount: rentalDetails.totalAmount,
-          callbackUrl: `${window.location.origin}/payment/verify`,
-        }),
-      });
-
-      if (!paymentResponse.ok) {
-        throw new Error("Failed to initialize payment");
-      }
-
-      const paymentData = await paymentResponse.json();
       setPaymentReference(paymentData.reference);
 
       // Open Paystack payment modal
       if (window.PaystackPop) {
         const handler = window.PaystackPop.setup({
           key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "pk_test_...",
-          email: currentUser.email,
+          email: user.email,
           amount: paymentData.amount || rentalDetails.totalAmount * 100, // Convert to kobo
           reference: paymentData.reference,
           callback: async (response: PaystackResponse) => {
@@ -193,22 +166,19 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
   const verifyPayment = async (reference: string) => {
     try {
-      const response = await fetch(
-        `/api/payments/paystack/verify/${reference}`
-      );
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success) {
-          setPaymentStatus("success");
-          // Payment verified successfully
-          setTimeout(() => {
-            onClose();
-            window.location.href = "/rentals";
-          }, 2000);
-        }
+      const result = await apiClient.verifyPaystackPayment(reference);
+      if ((result as any).success !== false) {
+        setPaymentStatus("success");
+        setTimeout(() => {
+          onClose();
+          window.location.href = "/rentals";
+        }, 2000);
+      } else {
+        setPaymentStatus("failed");
       }
     } catch (err) {
       console.error("Payment verification error:", err);
+      setPaymentStatus("failed");
     }
   };
 

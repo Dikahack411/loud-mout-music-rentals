@@ -54,6 +54,11 @@ const ProfilePage = () => {
             [child]: value,
           },
         }));
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          [parent]: value as unknown as string,
+        }));
       }
     } else {
       setFormData((prev) => ({
