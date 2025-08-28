@@ -37,12 +37,14 @@ const registerUser = async (req, res) => {
 
     if (user) {
       res.status(201).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        role: user.role,
-        isVerified: user.isVerified,
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          role: user.role,
+          isVerified: user.isVerified,
+        },
         token: generateToken(user._id),
       });
     } else {
@@ -66,12 +68,14 @@ const loginUser = async (req, res) => {
 
     if (user && (await user.comparePassword(password))) {
       res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        role: user.role,
-        isVerified: user.isVerified,
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          role: user.role,
+          isVerified: user.isVerified,
+        },
         token: generateToken(user._id),
       });
     } else {
@@ -135,14 +139,16 @@ const updateUserProfile = async (req, res) => {
       const updatedUser = await user.save();
 
       res.json({
-        _id: updatedUser._id,
-        name: updatedUser.name,
-        email: updatedUser.email,
-        phone: updatedUser.phone,
-        role: updatedUser.role,
-        address: updatedUser.address,
-        profileImage: updatedUser.profileImage,
-        isVerified: updatedUser.isVerified,
+        user: {
+          _id: updatedUser._id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          phone: updatedUser.phone,
+          role: updatedUser.role,
+          address: updatedUser.address,
+          profileImage: updatedUser.profileImage,
+          isVerified: updatedUser.isVerified,
+        },
         token: generateToken(updatedUser._id),
       });
     } else {
